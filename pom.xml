@@ -11,6 +11,7 @@
     <modules>
         <module>cs-bigdata</module>
         <module>cs-https</module>
+        <module>leadbank-bigdata</module>
     </modules>
 <dependencies>
     <dependency>

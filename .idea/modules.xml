@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/cs-bigdata/cs-bigdata.iml" filepath="$PROJECT_DIR$/cs-bigdata/cs-bigdata.iml" />
       <module fileurl="file://$PROJECT_DIR$/cs-https/cs-https.iml" filepath="$PROJECT_DIR$/cs-https/cs-https.iml" />
+      <module fileurl="file://$PROJECT_DIR$/leadbank-bigdata/leadbank-bigdata.iml" filepath="$PROJECT_DIR$/leadbank-bigdata/leadbank-bigdata.iml" />
       <module fileurl="file://$PROJECT_DIR$/ws.iml" filepath="$PROJECT_DIR$/ws.iml" />
     </modules>
   </component>
