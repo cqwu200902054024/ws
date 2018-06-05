@@ -12,10 +12,10 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="cs-bigdata" target="1.8" />
-      <module name="cs-https" target="1.8" />
-      <module name="leadbank-bigdata" target="1.8" />
-      <module name="ws" target="1.8" />
+      <module name="cs-bigdata" target="1.7" />
+      <module name="cs-https" target="1.5" />
+      <module name="leadbank-bigdata" target="1.5" />
+      <module name="ws" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
