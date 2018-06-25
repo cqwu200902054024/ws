@@ -97,7 +97,7 @@ public class IdCardEncodeByMD5 {
 		    		out.write((EncoderHandler.encodeByMD5(idCard) + "\t" + idCard).getBytes());
 		    		out.write("\n".getBytes());
 		    	}
-		    }
+		    }//
 		}
 		out.close();
 		System.out.println("generator over! take time: " + (System.currentTimeMillis() - start_time));

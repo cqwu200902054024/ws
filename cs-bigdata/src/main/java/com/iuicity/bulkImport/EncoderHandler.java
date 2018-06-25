@@ -1,4 +1,4 @@
-package com.iuicity.util;
+package com.iuicity.bulkImport;
 
 import java.security.MessageDigest;
 
@@ -7,10 +7,8 @@ public class EncoderHandler {
 			'e', 'f' };
 
 	public static String encode(String algorithm, String str) {
-		if (str == null) {
+		if (str == null)
 			return null;
-		}
-
 		try {
 			MessageDigest messageDigest = MessageDigest.getInstance(algorithm);
 			messageDigest.update(str.getBytes());
@@ -21,10 +19,8 @@ public class EncoderHandler {
 	}
 
 	public static String encodeByMD5(String str) {
-		if (str == null) {
+		if (str == null)
 			return null;
-		}
-
 		try {
 			MessageDigest messageDigest = MessageDigest.getInstance("MD5");
 			messageDigest.update(str.getBytes());
@@ -46,10 +42,9 @@ public class EncoderHandler {
 	}
 
 	public static void main(String[] args) {
-		System.out.println("111111 MD5  :" + encodeByMD5("110101195709101053"));
+		System.out.println("111111 MD5  :" + encodeByMD5("111111"));
 		System.out.println("111111 MD5  :" + encode("MD5", "111111"));
 		System.out.println("111111 SHA1 :" + encode("SHA1", "17316324752"));
-
 		System.out.println("abcdef".substring(0, 2));
 		System.out.println("171170".indexOf("170") > -1);
 	}

@@ -1,17 +1,33 @@
-package com.iuicity.dataGenerator;
+package com.iuicity.bulkImport;
 
-import com.iuicity.util.Utils;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.util.Bytes;
 
 
-public class IdCardEncodeBySM3 {
+public class AddIdCardGeneratorTest {
+	public static final Set<Integer> areaCode = new HashSet<>();
 
+	private static Configuration conf = null;
+
+	static {
+		areaCode.add(120102);
+		conf = HBaseConfiguration.create();
+		conf = HBaseConfiguration.create();
+		conf.set("hbase.zookeeper.quorum", "datanode3,datanode4,datanode5");
+		conf.set("hbase.zookeeper.property.clientPort", "2181");
+	}
+    
 	public static char calcTrailingNumber(char[] chars) {
 		if (chars.length < 17) {
 			return ' ';
@@ -30,7 +46,7 @@ public class IdCardEncodeBySM3 {
 	}
    
 	/**
-	 * 枚举某段时间内所有日
+	 * 枚举某段时间内所有日期
 	 * @param dBegin
 	 * @param dEnd
 	 * @return
@@ -64,36 +80,41 @@ public class IdCardEncodeBySM3 {
 				codeList.add(i + "");
 			}
 		}
+		
 		return codeList;
 	}
 	
-	public static void main(String[] args) throws ParseException, IOException {
-  	  String start = args[0];
-  	  String end = args[1];
-  	  System.out.println(start + "-" + end );
-  	  long start_time = System.currentTimeMillis();
+	
+	@SuppressWarnings("deprecation")
+	public static void main(String[] args) throws Exception {
+		System.out.println("start============");
+  	  String start = args[0];  
+  	  String end = args[1];  
   	  SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");  
   	  Date dBegin = sdf.parse(start);  
   	  Date dEnd = sdf.parse(end);  
-  	  List<Date> lDate = listDates(dBegin,dEnd);  
+  	  List<Date> lDate = listDates(dBegin,dEnd); 
+  	  HTable table = new HTable(conf, args[2]);
+  	  table.setAutoFlush(false);
+  	  table.setWriteBufferSize(512 * 1024);
   	  int areaCo = 0;
   	  String dateStr = "";
   	  String idCard =  "";
-  	  FileOutputStream out = new FileOutputStream(new File(args[2]));
-      Set<Integer> codes = Utils.txtToSet("codes.txt");
-		for(Integer code : codes) {
-			areaCo = code; 
+		for(Integer code:AddIdCardGeneratorTest.areaCode) {
+		 	 areaCo = code;  
 		    for(Date dt:lDate) {
-	    	dateStr = sdf.format(dt);
+		    	dateStr = sdf.format(dt);
 		    	for(String rcode:listRandomCode()) {
 		    		String idCard17 = areaCo + dateStr + rcode;
 		    		idCard = areaCo + dateStr + rcode + calcTrailingNumber(idCard17.toCharArray());
-		    		out.write((Utils.encodeBySM3(idCard) + "\t" + idCard).getBytes());
-		    		out.write("\n".getBytes());
+		    		Put put = new Put(Bytes.toBytes(EncoderHandler.encodeByMD5(idCard)));// 指定行
+		    		put.add(Bytes.toBytes("md5"), Bytes.toBytes("idcard"),
+		    				Bytes.toBytes(idCard));
+		    		table.put(put);
 		    	}
 		    }
-		}
-		out.close();
-		System.out.println("generator over! take time: " + (System.currentTimeMillis() - start_time));
+		}  
+		table.close();
+		System.out.println("game over=======================");
 	}
 }
